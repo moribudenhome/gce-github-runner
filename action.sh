@@ -228,10 +228,12 @@ function start_vm {
 cat <<EOF > /etc/profile.d/proxy.sh
 export http_proxy=${proxy_url}
 export https_proxy=${proxy_url}
+export no_proxy=169.254.169.254,metadata.google.internal,localhost,127.0.0.1,::1
 EOF
 chmod +x /etc/profile.d/proxy.sh
 export http_proxy=${proxy_url}
 export https_proxy=${proxy_url}
+export no_proxy=169.254.169.254,metadata.google.internal,localhost,127.0.0.1,::1
 "
   fi
 
