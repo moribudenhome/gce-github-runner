@@ -227,11 +227,12 @@ function start_vm {
     startup_prelude="${startup_prelude}
 echo 'export http_proxy=${proxy_url}' > /etc/profile.d/proxy.sh
 echo 'export https_proxy=${proxy_url}' >> /etc/profile.d/proxy.sh
-echo 'export no_proxy=169.254.169.254,metadata.google.internal,localhost,127.0.0.1,::1' >> /etc/profile.d/proxy.sh
+echo 'export no_proxy=169.254.169.254\\,metadata.google.internal\\,localhost\\,127.0.0.1\\,::1' >> /etc/profile.d/proxy.sh
 chmod +x /etc/profile.d/proxy.sh
+
 export http_proxy=${proxy_url}
 export https_proxy=${proxy_url}
-export no_proxy=169.254.169.254,metadata.google.internal,localhost,127.0.0.1,::1
+export no_proxy=169.254.169.254\\,metadata.google.internal\\,localhost\\,127.0.0.1\\,::1
 "
   fi
 
