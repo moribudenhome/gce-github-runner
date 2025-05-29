@@ -42,6 +42,8 @@ inputs:
   network:
     description: Specifies the network that the VM instances are a part of.
     required: false
+  tags: 
+    required: false
   subnet:
     description: Specifies the subnet that the VM instances are a part of (must be part of network).
     required: false
@@ -145,4 +147,5 @@ runs:
         --maintenance_policy_terminate=${{ inputs.maintenance_policy_terminate }}
         --arm=${{ inputs.arm }}
         --min_cpu_platform='${{ inputs.min_cpu_platform }}'
+        --tags='${{ inputs.tags }}'
       shell: bash
