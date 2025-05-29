@@ -42,6 +42,7 @@ maintenance_policy_terminate=
 arm=
 accelerator=
 min_cpu_platform_flag=
+tags=
 
 OPTLIND=1
 while getopts_long :h opt \
@@ -63,6 +64,7 @@ while getopts_long :h opt \
   scopes required_argument \
   shutdown_timeout required_argument \
   subnet optional_argument \
+  tags optional_argument \
   preemptible required_argument \
   ephemeral required_argument \
   no_external_address required_argument \
@@ -127,6 +129,9 @@ do
       ;;
     subnet)
       subnet=${OPTLARG-$subnet}
+      ;;
+    tags)
+      tags=${OPTLARG-$tags}
       ;;
     preemptible)
       preemptible=$OPTLARG
@@ -311,6 +316,7 @@ function start_vm {
   gh_repo_owner="$(truncate_to_label "${GITHUB_REPOSITORY_OWNER}")"
   gh_repo="$(truncate_to_label "${GITHUB_REPOSITORY##*/}")"
   gh_run_id="${GITHUB_RUN_ID}"
+  tags_flag=$([[ -n "${tags}" ]] && echo "--tags=${tags}" || echo "")
 
   gcloud compute instances create ${VM_ID} \
     --zone=${machine_zone} \
@@ -328,6 +334,7 @@ function start_vm {
     ${subnet_flag} \
     ${accelerator} \
     ${maintenance_policy_flag} \
+    ${tags_flag} \
     "${min_cpu_platform_flag}" \
     --labels=gh_ready=0,gh_repo_owner="${gh_repo_owner}",gh_repo="${gh_repo}",gh_run_id="${gh_run_id}" \
     --metadata=startup-script="$startup_script" \
