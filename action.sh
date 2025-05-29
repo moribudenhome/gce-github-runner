@@ -337,7 +337,7 @@ export no_proxy=169.254.169.254\\,metadata.google.internal\\,localhost\\,127.0.0
   tags_flag=$([[ -n "${tags}" ]] && echo "--tags=${tags}" || echo "")
 
   startup_tmp=$(mktemp)
-  echo "${startup_script}" > "${startup_tmp}"
+  echo "${startup_script}" >| "${startup_tmp}"
 
   gcloud compute instances create ${VM_ID} \
     --zone=${machine_zone} \
