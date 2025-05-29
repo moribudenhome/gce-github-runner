@@ -43,6 +43,7 @@ arm=
 accelerator=
 min_cpu_platform_flag=
 tags=
+proxy_url=
 
 OPTLIND=1
 while getopts_long :h opt \
@@ -73,6 +74,7 @@ while getopts_long :h opt \
   maintenance_policy_terminate optional_argument \
   accelerator optional_argument \
   min_cpu_platform optional_argument \
+  proxy_url optional_argument \
   help no_argument "" "$@"
 do
   case "$opt" in
@@ -157,6 +159,9 @@ do
     min_cpu_platform)
       min_cpu_platform_flag=--min-cpu-platform="$OPTLARG"
       ;;
+    proxy_url)
+      proxy_url=${OPTLARG-$proxy_url}
+      ;;
     h|help)
       usage
       exit 0
@@ -217,6 +222,18 @@ function start_vm {
   }
   trap shutdown ERR
   "
+  
+  if [[ -n "${proxy_url}" ]]; then
+    startup_prelude="${startup_prelude}
+cat <<EOF > /etc/profile.d/proxy.sh
+export http_proxy=${proxy_url}
+export https_proxy=${proxy_url}
+EOF
+chmod +x /etc/profile.d/proxy.sh
+export http_proxy=${proxy_url}
+export https_proxy=${proxy_url}
+"
+  fi
 
   startup_script="
 	# Create a systemd service in charge of shutting down the machine once the workflow has finished
