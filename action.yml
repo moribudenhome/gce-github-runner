@@ -109,6 +109,8 @@ inputs:
     description: "When specified, the VM will be scheduled on host with specified CPU architecture or a newer one."
     default: AUTOMATIC
     required: true
+  proxy_url:
+    required: false
 outputs:
   label:
     description: >-
@@ -148,4 +150,5 @@ runs:
         --arm=${{ inputs.arm }}
         --min_cpu_platform='${{ inputs.min_cpu_platform }}'
         --tags='${{ inputs.tags }}'
+        --proxy_url='${{ inputs.proxy_url }}'
       shell: bash
