@@ -336,6 +336,9 @@ export no_proxy=169.254.169.254\\,metadata.google.internal\\,localhost\\,127.0.0
   gh_run_id="${GITHUB_RUN_ID}"
   tags_flag=$([[ -n "${tags}" ]] && echo "--tags=${tags}" || echo "")
 
+  startup_tmp=$(mktemp)
+  echo "${startup_script}" > "${startup_tmp}"
+
   gcloud compute instances create ${VM_ID} \
     --zone=${machine_zone} \
     ${disk_size_flag} \
@@ -355,7 +358,7 @@ export no_proxy=169.254.169.254\\,metadata.google.internal\\,localhost\\,127.0.0
     ${tags_flag} \
     "${min_cpu_platform_flag}" \
     --labels=gh_ready=0,gh_repo_owner="${gh_repo_owner}",gh_repo="${gh_repo}",gh_run_id="${gh_run_id}" \
-    --metadata=startup-script="$startup_script" \
+    --metadata-from-file=startup-script="${startup_tmp}" \
     && echo "label=${VM_ID}" >> $GITHUB_OUTPUT
 
   safety_off
