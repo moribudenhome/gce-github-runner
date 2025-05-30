@@ -225,11 +225,15 @@ function start_vm {
   
   if [[ -n "${proxy_url}" ]]; then
     NO_PROXY_LIST="169.254.169.254,metadata.google.internal,localhost,127.0.0.1,::1"
-startup_prelude="${startup_prelude}
+    startup_prelude="${startup_prelude}
 echo 'export http_proxy=${proxy_url}'   >  /etc/profile.d/proxy.sh
 echo 'export https_proxy=${proxy_url}'  >> /etc/profile.d/proxy.sh
 echo 'export no_proxy=${NO_PROXY_LIST}' >> /etc/profile.d/proxy.sh
 chmod +x /etc/profile.d/proxy.sh
+
+echo 'http_proxy=${proxy_url}'   >> /etc/environment
+echo 'https_proxy=${proxy_url}'  >> /etc/environment
+echo 'no_proxy=${NO_PROXY_LIST}' >> /etc/environment
 
 export http_proxy=${proxy_url}
 export https_proxy=${proxy_url}
